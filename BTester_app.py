@@ -743,56 +743,66 @@ value=st.session_state["reflection"],
 height=140,
 )
 
-#============================================================
-#EXPORT
-#============================================================
+# ============================================================
+# EXPORT
+# ============================================================
 
 if summary is not None:
     response_data = {
-"timestamp_utc": datetime.now(timezone.utc).isoformat(),
-"student_name": st.session_state["student_name"],
-"activity_mode": activity_mode,
-"object_state": object_state,
-"number_of_trials": number_of_trials,
-"explosion_count": summary.explosion_count,
-"bright_port_count": summary.bright_count,
-"dark_port_count": summary.dark_count,
-"explosion_fraction": summary.explosion_fraction,
-"bright_port_fraction": summary.bright_fraction,
-"dark_port_fraction": summary.dark_fraction,
-"prediction": st.session_state["prediction"],
-"reasoning": st.session_state["reasoning"],
-"reflection": st.session_state["reflection"],
-}
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "student_name": st.session_state["student_name"],
+        "activity_mode": activity_mode,
+        "object_state": object_state,
+        "number_of_trials": number_of_trials,
+        "explosion_count": summary.explosion_count,
+        "bright_port_count": summary.bright_count,
+        "dark_port_count": summary.dark_count,
+        "explosion_fraction": summary.explosion_fraction,
+        "bright_port_fraction": summary.bright_fraction,
+        "dark_port_fraction": summary.dark_fraction,
+        "prediction": st.session_state["prediction"],
+        "reasoning": st.session_state["reasoning"],
+        "reflection": st.session_state["reflection"],
+    }
 
-export_left, export_right = st.columns(2)
+    export_left, export_right = st.columns(2)
 
-with export_left:
-    st.download_button(
-        label="Download response as JSON",
-        data=json.dumps(response_data, indent=2),
-        file_name="interaction_free_measurement_response.json",
-        mime="application/json",
-        use_container_width=True,
-    )
+    with export_left:
+        json_data = json.dumps(
+            response_data,
+            indent=2,
+        )
 
-with export_right:
-    csv_buffer = io.StringIO()
+        st.download_button(
+            label="Download response as JSON",
+            data=json_data,
+            file_name="interaction_free_measurement_response.json",
+            mime="application/json",
+            use_container_width=True,
+        )
 
-    writer = csv.DictWriter(
-        csv_buffer,
-        fieldnames=response_data.keys(),
-    )
+    with export_right:
+        csv_buffer = io.StringIO()
 
-    writer.writeheader()
-    writer.writerow(response_data)
+        writer = csv.DictWriter(
+            csv_buffer,
+            fieldnames=response_data.keys(),
+        )
 
-    st.download_button(
-        label="Download response as CSV",
-        data=csv_buffer.getvalue(),
-        file_name="interaction_free_measurement_response.csv",
-        mime="text/csv",
-        use_container_width=True,
+        writer.writeheader()
+        writer.writerow(response_data)
+
+        st.download_button(
+            label="Download response as CSV",
+            data=csv_buffer.getvalue(),
+            file_name="interaction_free_measurement_response.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
+
+else:
+    st.info(
+        "Run the experiment before downloading the results."
     )
 #============================================================
 #INSTRUCTOR NOTES
