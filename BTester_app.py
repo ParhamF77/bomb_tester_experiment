@@ -332,7 +332,7 @@ for key, value in defaults.items():
 st.title("Interaction-Free Measurement Explorer")
 
 # Optional image directly under the title
-image_path = Path("BTester_Setup.jpg")
+image_path = Path("MZ_Optic_Setup.png")
 
 if image_path.exists():
     st.image(
